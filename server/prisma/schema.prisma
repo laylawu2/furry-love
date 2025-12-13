@@ -1,0 +1,69 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstName String?  @db.VarChar(125)
+  lastName  String?  @db.VarChar(125)
+  createdAt DateTime @default(now())
+  role      Role     @default(USER)
+  pets      Pet[]
+}
+
+model Pet {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(125)
+  dateOfBirth  DateTime
+  type         PetType
+  ownerId      Int
+  owner        User          @relation(fields: [ownerId], references: [id])
+  createdAt    DateTime      @default(now())
+  vaccinations Vaccination[]
+  allergies    Allergy[]
+  imageUrl     String?
+}
+
+model Vaccination {
+  id             Int      @id @default(autoincrement())
+  petId          Int
+  pet            Pet      @relation(fields: [petId], references: [id])
+  name           String
+  administeredAt DateTime
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+}
+
+model Allergy {
+  id        Int             @id @default(autoincrement())
+  petId     Int
+  pet       Pet             @relation(fields: [petId], references: [id])
+  reactions String
+  severity  AllergySeverity
+  createdAt DateTime        @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PetType {
+  DOG
+  CAT
+  BIRD
+  FISH
+  REPTILE
+  OTHER
+}
+
+enum AllergySeverity {
+  MILD
+  SEVERE
+}
