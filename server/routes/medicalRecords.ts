@@ -3,6 +3,27 @@ import { prisma } from "../src/db.js";
 
 const router = express.Router();
 
+// Get medical records for a pet
+router.get("/pets/:id", async (req, res) => {
+  const petId = parseInt(req.params.id, 10);
+
+  try {
+    const vaccinations = await prisma.vaccination.findMany({
+      where: { petId },
+      orderBy: { administeredAt: "desc" }
+    });
+    const allergies = await prisma.allergy.findMany({
+      where: { petId },
+      orderBy: { createdAt: "desc" }
+    });
+
+    res.json({ vaccinations, allergies });
+  } catch (error) {
+    console.error("Error fetching medical records:", error);
+    res.status(500).json({ error: "Failed to fetch medical records" });
+  }
+});
+
 // Add a new vaccination
 router.post("/pets/:id/vaccinations", async (req, res) => {
   const petId = parseInt(req.params.id, 10);
