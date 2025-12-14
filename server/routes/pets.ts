@@ -4,14 +4,15 @@ import { prisma } from "../src/db.js";
 const router = express.Router();
 
 // View all my pets
-router.get("/me", async (req, res) => {
+router.get("/", async (req, res) => {
   // Replace with actual user ID from authentication
   const userId = 1;
 
+  // Admin user can view all pets
+  // Individual users can view only their own pets
   try {
     const pets = await prisma.pet.findMany({
-      where: { ownerId: userId },
-      include: { allergies: true, vaccinations: true }
+      where: { ownerId: userId }
     });
     res.json(pets);
   } catch (error) {

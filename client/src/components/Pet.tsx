@@ -1,0 +1,30 @@
+import { Link } from "react-router";
+import type { PetModel } from "../lib/models";
+// import styles from "./pet.module.css";
+import PetVaccineList from "./PetVaccineList";
+import PetAllergyList from "./PetAllergyList";
+
+interface PetProps {
+  pet: PetModel;
+}
+
+const Pet = ({ pet }: PetProps) => {
+  return (
+    <Link
+      to={`/pets/${pet.id}`}
+      className="pet-card"
+      style={{ textDecoration: "none" }}
+    >
+      <h2>{pet.name}</h2>
+      <p>Type: {pet.type}</p>
+      <p>Date of Birth: {new Date(pet.dateOfBirth).toLocaleDateString()}</p>
+      {pet.imageUrl && (
+        <img src={pet.imageUrl} alt={`${pet.name}`} width={200} />
+      )}
+      <PetVaccineList pet={pet} />
+      <PetAllergyList pet={pet} />
+    </Link>
+  );
+};
+
+export default Pet;
