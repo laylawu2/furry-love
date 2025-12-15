@@ -15,7 +15,7 @@ const PetDetail = () => {
   if (error) return <div>Error: {error}</div>;
   if (!petData) return <div>No pet found.</div>;
 
-  return <Pet pet={petData} />;
+  return <Pet pet={petData} readOnly={false} />;
 };
 
 export default PetDetail;

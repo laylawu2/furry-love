@@ -6,24 +6,27 @@ import PetAllergyList from "./PetAllergyList";
 
 interface PetProps {
   pet: PetModel;
+  readOnly?: boolean;
 }
 
-const Pet = ({ pet }: PetProps) => {
+const Pet = ({ pet, readOnly = true }: PetProps) => {
   return (
-    <Link
-      to={`/pets/${pet.id}`}
-      className="pet-card"
-      style={{ textDecoration: "none" }}
-    >
-      <h2>{pet.name}</h2>
-      <p>Type: {pet.type}</p>
-      <p>Date of Birth: {new Date(pet.dateOfBirth).toLocaleDateString()}</p>
-      {pet.imageUrl && (
-        <img src={pet.imageUrl} alt={`${pet.name}`} width={200} />
-      )}
-      <PetVaccineList pet={pet} />
-      <PetAllergyList pet={pet} />
-    </Link>
+    <>
+      <Link
+        to={`/pets/${pet.id}`}
+        className="pet-card"
+        style={{ textDecoration: "none" }}
+      >
+        <h2>{pet.name}</h2>
+        <p>Type: {pet.type}</p>
+        <p>Date of Birth: {new Date(pet.dateOfBirth).toLocaleDateString()}</p>
+        {pet.imageUrl && (
+          <img src={pet.imageUrl} alt={`${pet.name}`} width={200} />
+        )}
+      </Link>
+      {!readOnly && <PetVaccineList pet={pet} />}
+      {!readOnly && <PetAllergyList pet={pet} />}
+    </>
   );
 };
 
