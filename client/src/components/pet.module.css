@@ -20,9 +20,9 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 20px;
   width: max-content;
   align-self: center;
+  margin-bottom: 24px;
 }
 
 .actionButton:hover:not(:disabled) {
@@ -93,4 +93,30 @@ section select:focus {
 
 .newPet {
   margin-top: 20px;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.cancelButton {
+  background-color: #6c757d;
+  color: #f9f9f9;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: max-content;
+  height: fit-content;
+  align-self: center;
+  margin-bottom: 24px;
+}
+
+.cancelButton:hover {
+  background-color: #5a6268;
 }

@@ -7,26 +7,7 @@ const AdminPanelList = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!stats) return <div>No stats found.</div>;
-  /**
- * {
-            "id": 1,
-            "petId": 1,
-            "name": "Rabies",
-            "administeredAt": "2023-03-15T00:00:00.000Z",
-            "expiresAt": "2026-01-15T08:00:00.000Z",
-            "createdAt": "2025-12-16T00:22:45.160Z",
-            "pet": {
-                "id": 1,
-                "name": "Luna",
-                "dateOfBirth": "2020-03-15T00:00:00.000Z",
-                "type": "DOG",
-                "ownerId": 1,
-                "createdAt": "2025-12-16T00:22:45.148Z",
-                "updatedAt": "2025-12-16T03:56:31.470Z",
-                "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1"
-            }
-        }
- */
+
   return (
     <div>
       <div className={styles.panelContainer}>
