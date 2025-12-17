@@ -1,0 +1,42 @@
+.panel {
+  flex: 1;
+  border: solid 1px rgb(208, 208, 208);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 100px;
+}
+
+.panel:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.panelContainer {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.listView {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 16px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 4px;
+}
+
+.listView dt {
+  grid-row: 1;
+  font-weight: bold;
+  color: rgb(80, 80, 80);
+}
+
+.listView dd {
+  grid-row: 2;
+  margin: 0;
+}

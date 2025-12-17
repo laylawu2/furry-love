@@ -1,10 +1,10 @@
-import AdminPanel from "../components/AdminPanel";
+import AdminPanelList from "../components/AdminPanelList";
 
 const AdminDashboard = () => {
   return (
     <div>
-      <div>Admin Dashboard Page</div>
-      <AdminPanel />
+      <h2>Admin Dashboard Page</h2>
+      <AdminPanelList />
     </div>
   );
 };

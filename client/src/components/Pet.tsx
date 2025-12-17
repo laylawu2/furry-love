@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import type { PetModel } from "../lib/models";
-// import styles from "./pet.module.css";
 import PetVaccineList from "./PetVaccineList";
 import PetAllergyList from "./PetAllergyList";
+import styles from "./pet.module.css";
 
 interface PetProps {
   pet: PetModel;
@@ -12,11 +12,7 @@ interface PetProps {
 const Pet = ({ pet, readOnly = true }: PetProps) => {
   return (
     <>
-      <Link
-        to={`/pets/${pet.id}`}
-        className="pet-card"
-        style={{ textDecoration: "none" }}
-      >
+      <Link to={`/pets/${pet.id}`} className={styles.petCard}>
         <h2>{pet.name}</h2>
         <p>Type: {pet.type}</p>
         <p>Date of Birth: {new Date(pet.dateOfBirth).toLocaleDateString()}</p>

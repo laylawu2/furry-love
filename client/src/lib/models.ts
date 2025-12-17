@@ -1,8 +1,10 @@
+type PetType = "DOG" | "CAT" | "BIRD" | "FISH" | "REPTILE" | "OTHER";
+
 export interface PetModel {
   id: number;
   name: string;
   dateOfBirth: string;
-  type: "DOG" | "CAT" | "BIRD" | "FISH" | "REPTILE" | "OTHER";
+  type: PetType;
   ownerId: number;
   imageUrl?: string;
   createdAt: string;
@@ -18,6 +20,7 @@ export interface Vaccination {
   administeredAt: string;
   expiresAt: string;
   createdAt: string;
+  pet: PetModel;
 }
 
 export interface Allergy {
@@ -31,4 +34,10 @@ export interface Allergy {
 export interface MedicalRecords {
   vaccinations: Vaccination[];
   allergies: Allergy[];
+}
+
+export interface AdminStats {
+  totalPets: number;
+  petsByType: { type: PetType; _count: { type: number } }[];
+  upcomingVaccinations: Vaccination[];
 }
