@@ -36,7 +36,7 @@ model Pet {
 model Vaccination {
   id             Int      @id @default(autoincrement())
   petId          Int
-  pet            Pet      @relation(fields: [petId], references: [id])
+  pet            Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
   name           String
   administeredAt DateTime
   expiresAt      DateTime
@@ -49,7 +49,7 @@ model Vaccination {
 model Allergy {
   id        Int             @id @default(autoincrement())
   petId     Int
-  pet       Pet             @relation(fields: [petId], references: [id])
+  pet       Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
   reactions String
   severity  AllergySeverity
   createdAt DateTime        @default(now())

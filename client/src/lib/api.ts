@@ -7,4 +7,19 @@ const api = axios.create({
   }
 });
 
+// Add request interceptor to attach token
+api.interceptors.request.use(
+  (config) => {
+    // Get token from auth context/localStorage
+    const token = "2";
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export default api;

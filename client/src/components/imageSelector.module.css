@@ -1,0 +1,36 @@
+.imageSelector {
+  margin: 20px 0;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  max-width: 650px;
+}
+
+.imageOption {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.imageOption:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.imageOption.selected {
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+@media (max-width: 768px) {
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+}

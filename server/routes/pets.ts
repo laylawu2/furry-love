@@ -49,6 +49,7 @@ router.get("/search", async (req, res) => {
 // Filter pets by type
 router.get("/filter", async (req, res) => {
   const { type } = req.query;
+  const userId = 1;
 
   if (!type || typeof type !== "string") {
     return res.status(400).json({ error: "Type query parameter is required" });
@@ -56,7 +57,7 @@ router.get("/filter", async (req, res) => {
 
   try {
     const pets = await prisma.pet.findMany({
-      where: { type: type.toUpperCase() as any }
+      where: { type: type.toUpperCase() as any, ownerId: userId }
     });
     res.json(pets);
   } catch (error) {

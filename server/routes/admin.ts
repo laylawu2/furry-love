@@ -1,11 +1,10 @@
 import express from "express";
 import { prisma } from "../src/db.js";
-import { requireAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 // Admin route to view total pets, pets by type and upcoming vaccinations
-router.get("/stats", requireAdmin, async (req, res) => {
+router.get("/stats", async (req, res) => {
   try {
     const totalPets = await prisma.pet.count();
 
