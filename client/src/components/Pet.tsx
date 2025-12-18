@@ -11,7 +11,6 @@ interface PetProps {
 }
 
 const Pet = ({ pet, isOwner = false, readOnly = true }: PetProps) => {
-  console.log("isOwner", isOwner);
   return (
     <>
       <Link to={`/pets/${pet.id}`} className={styles.petCard}>

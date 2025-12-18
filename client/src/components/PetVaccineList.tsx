@@ -121,7 +121,7 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  console.log("vac list", vaccineList);
+
   return (
     <div className={styles.medicalSection}>
       {vaccineList && vaccineList.length > 0 && (
