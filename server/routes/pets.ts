@@ -1,5 +1,6 @@
 import express from "express";
 import { prisma } from "../src/db.js";
+import { PetType } from "@prisma/client";
 
 const router = express.Router();
 
@@ -14,6 +15,11 @@ router.get("/", async (req, res) => {
     const pets = await prisma.pet.findMany({
       where: { ownerId: userId }
     });
+    const petsWithOwnerInfo = pets.map((pet) => ({
+      ...pet,
+      isOwner: true
+    }));
+    res.json(petsWithOwnerInfo);
     res.json(pets);
   } catch (error) {
     console.error("Error fetching pets:", error);
@@ -29,7 +35,6 @@ router.get("/search", async (req, res) => {
     return res.status(400).json({ error: "Name query parameter is required" });
   }
 
-  console.log("Searching pets with name:", name);
   try {
     const pets = await prisma.pet.findMany({
       where: {
@@ -39,7 +44,11 @@ router.get("/search", async (req, res) => {
         }
       }
     });
-    res.json(pets);
+    const petsWithOwnerInfo = pets.map((pet) => ({
+      ...pet,
+      isOwner: req.user?.id === pet.ownerId
+    }));
+    res.json(petsWithOwnerInfo);
   } catch (error) {
     console.error("Error searching pets:", error);
     res.status(500).json({ error: "Failed to search pets" });
@@ -49,7 +58,6 @@ router.get("/search", async (req, res) => {
 // Filter pets by type
 router.get("/filter", async (req, res) => {
   const { type } = req.query;
-  const userId = 1;
 
   if (!type || typeof type !== "string") {
     return res.status(400).json({ error: "Type query parameter is required" });
@@ -57,9 +65,13 @@ router.get("/filter", async (req, res) => {
 
   try {
     const pets = await prisma.pet.findMany({
-      where: { type: type.toUpperCase() as any, ownerId: userId }
+      where: { type: type.toUpperCase() as PetType }
     });
-    res.json(pets);
+    const petsWithOwnerInfo = pets.map((pet) => ({
+      ...pet,
+      isOwner: req.user?.id === pet.ownerId
+    }));
+    res.json(petsWithOwnerInfo);
   } catch (error) {
     console.error("Error filtering pets:", error);
     res.status(500).json({ error: "Failed to filter pets" });
@@ -80,7 +92,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ error: "Pet not found" });
     }
 
-    res.json(pet);
+    res.json({ ...pet, isOwner: req.user?.id === pet.ownerId });
   } catch (error) {
     console.error("Error fetching pet:", error);
     res.status(500).json({ error: "Failed to fetch pet" });

@@ -95,4 +95,45 @@ router.delete("/allergies/:id", async (req, res) => {
   }
 });
 
+// Update a vaccination
+router.put("/vaccinations/:id", async (req, res) => {
+  const vaccinationId = parseInt(req.params.id, 10);
+  const { name, administeredAt, expiresAt } = req.body;
+
+  try {
+    const updatedVaccination = await prisma.vaccination.update({
+      where: { id: vaccinationId },
+      data: {
+        name,
+        administeredAt: new Date(administeredAt),
+        expiresAt: new Date(expiresAt)
+      }
+    });
+    res.json(updatedVaccination);
+  } catch (error) {
+    console.error("Error updating vaccination:", error);
+    res.status(500).json({ error: "Failed to update vaccination" });
+  }
+});
+
+// Update an allergy
+router.put("/allergies/:id", async (req, res) => {
+  const allergyId = parseInt(req.params.id, 10);
+  const { reactions, severity } = req.body;
+
+  try {
+    const updatedAllergy = await prisma.allergy.update({
+      where: { id: allergyId },
+      data: {
+        reactions,
+        severity
+      }
+    });
+    res.json(updatedAllergy);
+  } catch (error) {
+    console.error("Error updating allergy:", error);
+    res.status(500).json({ error: "Failed to update allergy" });
+  }
+});
+
 export default router;

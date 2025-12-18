@@ -1,7 +1,13 @@
 import PetForm from "../components/PetForm";
+import BackButton from "../components/BackButton";
 
 const NewPet = () => {
-  return <PetForm />;
+  return (
+    <div>
+      <BackButton />
+      <PetForm />
+    </div>
+  );
 };
 
 export default NewPet;

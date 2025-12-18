@@ -9,6 +9,7 @@ const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(attachUser);
 app.use("/api", routes);
 
 app.listen(PORT, () => {

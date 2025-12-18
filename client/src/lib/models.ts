@@ -13,6 +13,10 @@ export interface PetModel {
   allergies?: Allergy[];
 }
 
+export interface PetData extends PetModel {
+  isOwner: boolean;
+}
+
 export interface Vaccination {
   id: number;
   petId: number;

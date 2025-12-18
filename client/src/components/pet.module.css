@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .listView {
   color: rgb(78, 70, 70);
   background-color: #f9f9f9;
@@ -6,9 +10,10 @@
   text-align: left;
 }
 
-.petContainer {
+.petsContainer {
   display: flex;
   flex-direction: column;
+  gap: 48px;
 }
 
 .actionButton {
@@ -20,9 +25,14 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  width: max-content;
+  width: 60%;
   align-self: center;
-  margin-bottom: 24px;
+  margin-top: 16px;
+}
+
+.searchButton {
+  width: max-content;
+  margin-top: 0;
 }
 
 .actionButton:hover:not(:disabled) {
@@ -36,7 +46,7 @@
 
 .petForm {
   width: 100%;
-  min-width: 600px;
+  max-width: 100%;
   padding: 20px;
 }
 
@@ -54,7 +64,7 @@
   border-left: 4px solid #c33;
 }
 
-section {
+.formField {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
@@ -62,7 +72,7 @@ section {
   margin: auto;
 }
 
-section label {
+.formField label {
   font-weight: 600;
   margin-bottom: 8px;
   color: #333;
@@ -70,8 +80,8 @@ section label {
   align-self: start;
 }
 
-section input,
-section select {
+.formField input,
+.formField select {
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -79,8 +89,8 @@ section select {
   transition: border-color 0.2s;
 }
 
-section input:focus,
-section select:focus {
+.formField input:focus,
+.formField select:focus {
   outline: none;
   border-color: cornflowerblue;
   box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.1);
@@ -89,6 +99,26 @@ section select:focus {
 .searchContainer {
   display: flex;
   flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.searchInput {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1;
+  max-width: 400px;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: cornflowerblue;
+  box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.1);
 }
 
 .newPet {
@@ -111,12 +141,173 @@ section select:focus {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  width: max-content;
+  width: 60%;
   height: fit-content;
   align-self: center;
-  margin-bottom: 24px;
+  margin-top: 16px;
 }
 
 .cancelButton:hover {
   background-color: #5a6268;
+}
+
+/* Filter Section */
+.filterContainer {
+  margin: 20px 0;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font-weight: 600;
+  color: #333;
+}
+
+.filterCount {
+  color: #666;
+  font-size: 14px;
+}
+
+.filterSelect {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: cornflowerblue;
+  box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.1);
+}
+
+/* Pet Card Styling */
+.petCard {
+  display: block;
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.petCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Medical Records Section */
+.medicalSection {
+  background-color: white;
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.sectionDivider {
+  height: 2px;
+  background: linear-gradient(to right, #e0e0e0, transparent);
+  margin: 32px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .formField {
+    max-width: 90%;
+  }
+
+  .petForm {
+    min-width: auto;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .petCard {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .medicalSection {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .searchContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchInput {
+    max-width: 100%;
+  }
+
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
+
+  .formActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actionButton,
+  .cancelButton {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .listView {
+    padding: 5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .formField {
+    max-width: 100%;
+  }
+
+  .petCard {
+    padding: 12px;
+  }
+
+  .medicalSection {
+    padding: 12px;
+  }
+
+  .petForm {
+    padding: 10px;
+  }
+
+  .petCard h2 {
+    font-size: 1.3em;
+  }
+
+  .filterLabel,
+  .filterCount {
+    font-size: 13px;
+  }
+
+  .backButton {
+    color: #333;
+    width: 10%;
+    height: auto;
+  }
 }

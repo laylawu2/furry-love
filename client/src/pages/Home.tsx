@@ -1,9 +1,22 @@
 import PetList from "../components/PetList";
+import { Link } from "react-router";
+import styles from "../components/pet.module.css";
 
 const Home = () => {
   return (
     <div>
-      <h1>Welcome to Furry Love</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px"
+        }}
+      >
+        <h1>Welcome to Furry Love</h1>
+        {/** Check user role - only show link if user is admin */}
+        <Link to="/admin/stats">Admin Dashboard</Link>
+      </div>
       <PetList />
     </div>
   );

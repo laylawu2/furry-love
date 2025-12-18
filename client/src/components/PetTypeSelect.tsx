@@ -5,6 +5,7 @@ interface PetTypeSelectProps {
   required?: boolean;
   id?: string;
   name?: string;
+  className?: string;
 }
 
 const PetTypeSelect = ({
@@ -13,7 +14,8 @@ const PetTypeSelect = ({
   includeAll = false,
   required = false,
   id = "pet-type",
-  name = "type"
+  name = "type",
+  className = ""
 }: PetTypeSelectProps) => {
   return (
     <select
@@ -22,6 +24,7 @@ const PetTypeSelect = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       required={required}
+      className={className}
     >
       {includeAll && <option value="ALL">All Types</option>}
       {!includeAll && <option value="" disabled>Choose here</option>}

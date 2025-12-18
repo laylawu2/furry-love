@@ -1,15 +1,17 @@
 import { Link } from "react-router";
-import type { PetModel } from "../lib/models";
+import type { PetData } from "../lib/models";
 import PetVaccineList from "./PetVaccineList";
 import PetAllergyList from "./PetAllergyList";
 import styles from "./pet.module.css";
 
 interface PetProps {
-  pet: PetModel;
+  pet: PetData;
+  isOwner?: boolean;
   readOnly?: boolean;
 }
 
-const Pet = ({ pet, readOnly = true }: PetProps) => {
+const Pet = ({ pet, isOwner = false, readOnly = true }: PetProps) => {
+  console.log("isOwner", isOwner);
   return (
     <>
       <Link to={`/pets/${pet.id}`} className={styles.petCard}>
@@ -20,8 +22,8 @@ const Pet = ({ pet, readOnly = true }: PetProps) => {
           <img src={pet.imageUrl} alt={`${pet.name}`} width={200} />
         )}
       </Link>
-      {!readOnly && <PetVaccineList pet={pet} />}
-      {!readOnly && <PetAllergyList pet={pet} />}
+      {isOwner && !readOnly && <PetVaccineList pet={pet} />}
+      {isOwner && !readOnly && <PetAllergyList pet={pet} />}
     </>
   );
 };

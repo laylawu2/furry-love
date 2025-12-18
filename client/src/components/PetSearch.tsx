@@ -1,11 +1,11 @@
 import { useState } from "react";
 import api from "../lib/api";
-import type { PetModel } from "../lib/models";
+import type { PetData } from "../lib/models";
 import { AxiosError } from "axios";
 import styles from "./pet.module.css";
 
 interface PetSearchProps {
-  onSuccess: (pets: PetModel[]) => void;
+  onSuccess: (pets: PetData[]) => void;
 }
 
 const PetSearch = ({ onSuccess }: PetSearchProps) => {
@@ -30,8 +30,9 @@ const PetSearch = ({ onSuccess }: PetSearchProps) => {
   };
 
   return (
-    <section>
+    <div className={styles.searchContainer}>
       <input
+        className={styles.searchInput}
         name="search"
         type="text"
         value={searchTerm}
@@ -39,13 +40,13 @@ const PetSearch = ({ onSuccess }: PetSearchProps) => {
         placeholder="Search for a pet"
       />
       <button
-        className={styles.actionButton}
+        className={`${styles.actionButton} ${styles.searchButton}`}
         type="button"
         onClick={handleSearch}
       >
         Search
       </button>
-    </section>
+    </div>
   );
 };
 

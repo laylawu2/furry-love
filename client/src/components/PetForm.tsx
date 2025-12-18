@@ -3,9 +3,22 @@ import api from "../lib/api";
 import ImageSelector from "./ImageSelector";
 import PetTypeSelect from "./PetTypeSelect";
 import styles from "./pet.module.css";
+import type { PetModel } from "../lib/models";
 
-const PetForm = () => {
-  const initialFormData = {
+interface PetFormProps {
+  initialData?: PetModel;
+  petId?: number;
+  onCancel?: () => void;
+  onSuccess?: () => void;
+}
+
+const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {}) => {
+  const initialFormData = initialData ? {
+    name: initialData.name,
+    dateOfBirth: initialData.dateOfBirth.split('T')[0],
+    type: initialData.type,
+    imageUrl: initialData.imageUrl || ""
+  } : {
     name: "",
     dateOfBirth: "",
     type: "",
@@ -13,6 +26,7 @@ const PetForm = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const isEditMode = !!petId;
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
@@ -33,12 +47,19 @@ const PetForm = () => {
     setSubmitting(true);
 
     try {
-      await api.post("/pets", formData);
-      setFormData(initialFormData);
-      alert("Pet created successfully!");
+      if (isEditMode) {
+        await api.put(`/pets/${petId}`, formData);
+        alert("Pet updated successfully!");
+        onSuccess?.();
+      } else {
+        await api.post("/pets", formData);
+        setFormData(initialFormData);
+        alert("Pet created successfully!");
+      }
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to create pet";
+      const errorMessage = error instanceof Error
+        ? error.message
+        : `Failed to ${isEditMode ? 'update' : 'create'} pet`;
       setSubmitError(errorMessage);
     } finally {
       setSubmitting(false);
@@ -47,11 +68,11 @@ const PetForm = () => {
 
   return (
     <form className={styles.petForm} onSubmit={handleSubmit}>
-      <h3 className={styles.title}>Add a New Pet</h3>
+      <h3 className={styles.title}>{isEditMode ? "Edit Pet" : "Add a New Pet"}</h3>
 
       {submitError && <div className={styles.errorMessage}>{submitError}</div>}
 
-      <section>
+      <div className={styles.formField}>
         <label htmlFor="name">Pet Name</label>
         <input
           id="name"
@@ -61,9 +82,9 @@ const PetForm = () => {
           onChange={handleChange}
           required
         />
-      </section>
+      </div>
 
-      <section>
+      <div className={styles.formField}>
         <label htmlFor="date-of-birth">Date of Birth</label>
         <input
           id="date-of-birth"
@@ -73,9 +94,9 @@ const PetForm = () => {
           onChange={handleChange}
           required
         />
-      </section>
+      </div>
 
-      <section>
+      <div className={styles.formField}>
         <label htmlFor="type">Type</label>
         <PetTypeSelect
           id="type"
@@ -84,9 +105,9 @@ const PetForm = () => {
           onChange={(value) => setFormData((prev) => ({ ...prev, type: value }))}
           required
         />
-      </section>
+      </div>
 
-      <section>
+      <div className={styles.formField}>
         <label htmlFor="image-url">Image URL</label>
         <input
           id="image-url"
@@ -95,7 +116,7 @@ const PetForm = () => {
           value={formData.imageUrl}
           onChange={handleChange}
         />
-      </section>
+      </div>
 
       {formData.type && (
         <ImageSelector
@@ -105,13 +126,27 @@ const PetForm = () => {
         />
       )}
 
-      <button
-        className={styles.actionButton}
-        type="submit"
-        disabled={submitting}
-      >
-        {submitting ? "Creating..." : "Create Pet"}
-      </button>
+      <div className={styles.formActions}>
+        <button
+          className={styles.actionButton}
+          type="submit"
+          disabled={submitting}
+        >
+          {submitting
+            ? (isEditMode ? "Updating..." : "Creating...")
+            : (isEditMode ? "Update Pet" : "Create Pet")
+          }
+        </button>
+        {isEditMode && onCancel && (
+          <button
+            className={styles.cancelButton}
+            type="button"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

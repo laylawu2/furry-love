@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../lib/api";
-import type { PetModel } from "../lib/models";
+import type { PetData } from "../lib/models";
 import Pet from "./Pet";
 import PetTypeSelect from "./PetTypeSelect";
 import styles from "./pet.module.css";
@@ -8,7 +8,7 @@ import PetSearch from "./PetSearch";
 import { Link } from "react-router-dom";
 
 const PetList = () => {
-  const [pets, setPets] = useState<PetModel[]>([]);
+  const [pets, setPets] = useState<PetData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState<string>("ALL");
@@ -53,23 +53,23 @@ const PetList = () => {
     }
   };
 
-  const handleSearchSuccess = (pets: PetModel[]) => {
+  const handleSearchSuccess = (pets: PetData[]) => {
     setPets(pets);
+  };
+
+  const getFilterCountMessage = () => {
+    const count = pets.length;
+    const petType =
+      filterType === "ALL" ? "pets" : `${filterType.toLowerCase()}(s)`;
+    return `Showing ${count} ${petType}`;
   };
 
   return (
     <div>
       <PetSearch onSuccess={handleSearchSuccess} />
 
-      <div
-        style={{
-          margin: "20px 0",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px"
-        }}
-      >
-        <label htmlFor="pet-type-filter" style={{ fontWeight: 600 }}>
+      <div className={styles.filterContainer}>
+        <label htmlFor="pet-type-filter" className={styles.filterLabel}>
           Filter by Type:
         </label>
         <PetTypeSelect
@@ -77,11 +77,9 @@ const PetList = () => {
           value={filterType}
           onChange={setFilterType}
           includeAll
+          className={styles.filterSelect}
         />
-        <span style={{ color: "#666", fontSize: "14px" }}>
-          Showing {pets.length}{" "}
-          {filterType === "ALL" ? "pets" : `${filterType.toLowerCase()}(s)`}
-        </span>
+        <span className={styles.filterCount}>{getFilterCountMessage()}</span>
       </div>
 
       <div className={styles.newPet}>
@@ -91,19 +89,23 @@ const PetList = () => {
         </Link>
       </div>
 
-      {pets.map((pet) => {
-        return (
-          <div className={styles.petContainer} key={pet.id}>
-            <Pet pet={pet} />
-            <button
-              className={styles.actionButton}
-              onClick={() => deletePet(pet.id)}
-            >
-              Delete Pet
-            </button>
-          </div>
-        );
-      })}
+      <div className={styles.petsContainer}>
+        {pets.map((pet) => {
+          return (
+            <div key={pet.id}>
+              <Pet pet={pet} isOwner={pet.isOwner} />
+              {pet.isOwner && (
+                <button
+                  className={styles.actionButton}
+                  onClick={() => deletePet(pet.id)}
+                >
+                  Delete Pet
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
