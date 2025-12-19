@@ -76,13 +76,6 @@ npx prisma migrate deploy
 node prisma/seed.js
 ```
 
-This will create:
-
-- 3 users
-- 5 pets
-- 7 vaccinations
-- 4 allergies
-
 ### 4. Client Setup
 
 #### Install Dependencies
