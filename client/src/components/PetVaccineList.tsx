@@ -204,13 +204,9 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
                   <>
                     <h4>{vac.name}</h4>
                     <div>
-                      Administered on:{" "}
-                      {new Date(vac.administeredAt).toLocaleDateString()}
+                      Administered on: {vac.administeredAt.split("T")[0]}
                     </div>
-                    <div>
-                      Expiring on:{" "}
-                      {new Date(vac.expiresAt).toLocaleDateString()}
-                    </div>
+                    <div>Expiring on: {vac.expiresAt.split("T")[0]}</div>
                     {pet.isOwner && (
                       <button
                         className={styles.actionButton}

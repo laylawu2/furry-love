@@ -4,6 +4,7 @@ import ImageSelector from "./ImageSelector";
 import PetTypeSelect from "./PetTypeSelect";
 import styles from "./pet.module.css";
 import type { PetModel } from "../lib/models";
+import { validatePetForm } from "../lib/validators";
 
 interface PetFormProps {
   initialData?: PetModel;
@@ -29,12 +30,21 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
   const isEditMode = !!petId;
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleImageSelect = (imageUrl: string) => {
@@ -44,6 +54,14 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitError(null);
+
+    // Validate form
+    const validationErrors = validatePetForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -80,8 +98,8 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           name="name"
           value={formData.name}
           onChange={handleChange}
-          required
         />
+        {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
       </div>
 
       <div className={styles.formField}>
@@ -92,8 +110,8 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           name="dateOfBirth"
           value={formData.dateOfBirth}
           onChange={handleChange}
-          required
         />
+        {errors.dateOfBirth && <span className={styles.errorMessage}>{errors.dateOfBirth}</span>}
       </div>
 
       <div className={styles.formField}>
@@ -102,9 +120,18 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           id="type"
           name="type"
           value={formData.type}
-          onChange={(value) => setFormData((prev) => ({ ...prev, type: value }))}
-          required
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, type: value }));
+            if (errors.type) {
+              setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.type;
+                return newErrors;
+              });
+            }
+          }}
         />
+        {errors.type && <span className={styles.errorMessage}>{errors.type}</span>}
       </div>
 
       <div className={styles.formField}>

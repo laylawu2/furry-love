@@ -211,3 +211,45 @@ export const validateAllergyForm = (
 
   return errors;
 };
+
+// Pet form validation
+export interface PetFormData {
+  name: string;
+  dateOfBirth: string;
+  type: string;
+  imageUrl: string;
+}
+
+export const validatePetForm = (
+  formData: PetFormData
+): Record<string, string> => {
+  const errors: Record<string, string> = {};
+
+  // Validate name
+  const nameError = isRequired(formData.name, "Pet name");
+  if (nameError) {
+    errors.name = nameError;
+  } else {
+    const minLengthError = minLength(formData.name, 2, "Pet name");
+    if (minLengthError) errors.name = minLengthError;
+  }
+
+  // Validate date of birth
+  if (!formData.dateOfBirth) {
+    errors.dateOfBirth = "Date of birth is required";
+  } else {
+    const futureError = isDateInFuture(formData.dateOfBirth);
+    if (futureError) {
+      errors.dateOfBirth = futureError;
+    } else {
+      const tooOldError = isDateTooOld(formData.dateOfBirth, 50);
+      if (tooOldError) errors.dateOfBirth = tooOldError;
+    }
+  }
+
+  // Validate type
+  const typeError = isRequired(formData.type, "Pet type");
+  if (typeError) errors.type = typeError;
+
+  return errors;
+};
