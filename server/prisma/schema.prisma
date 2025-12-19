@@ -25,28 +25,36 @@ model Pet {
   ownerId      Int
   owner        User          @relation(fields: [ownerId], references: [id])
   createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
   vaccinations Vaccination[]
   allergies    Allergy[]
   imageUrl     String?
+
+  @@index([ownerId])
 }
 
 model Vaccination {
   id             Int      @id @default(autoincrement())
   petId          Int
-  pet            Pet      @relation(fields: [petId], references: [id])
+  pet            Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
   name           String
   administeredAt DateTime
   expiresAt      DateTime
   createdAt      DateTime @default(now())
+
+  @@index([petId])
+  @@index([expiresAt])
 }
 
 model Allergy {
   id        Int             @id @default(autoincrement())
   petId     Int
-  pet       Pet             @relation(fields: [petId], references: [id])
+  pet       Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
   reactions String
   severity  AllergySeverity
   createdAt DateTime        @default(now())
+
+  @@index([petId])
 }
 
 enum Role {
