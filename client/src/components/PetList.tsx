@@ -96,7 +96,7 @@ const PetList = () => {
               <Pet pet={pet} isOwner={pet.isOwner} />
               {pet.isOwner && (
                 <button
-                  className={styles.actionButton}
+                  className={styles.small}
                   onClick={() => deletePet(pet.id)}
                 >
                   Delete Pet

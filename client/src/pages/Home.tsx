@@ -1,6 +1,5 @@
 import PetList from "../components/PetList";
 import { Link } from "react-router";
-import styles from "../components/pet.module.css";
 
 const Home = () => {
   return (

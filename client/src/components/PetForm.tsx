@@ -13,18 +13,25 @@ interface PetFormProps {
   onSuccess?: () => void;
 }
 
-const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {}) => {
-  const initialFormData = initialData ? {
-    name: initialData.name,
-    dateOfBirth: initialData.dateOfBirth.split('T')[0],
-    type: initialData.type,
-    imageUrl: initialData.imageUrl || ""
-  } : {
-    name: "",
-    dateOfBirth: "",
-    type: "",
-    imageUrl: ""
-  };
+const PetForm = ({
+  initialData,
+  petId,
+  onCancel,
+  onSuccess
+}: PetFormProps = {}) => {
+  const initialFormData = initialData
+    ? {
+        name: initialData.name,
+        dateOfBirth: initialData.dateOfBirth.split("T")[0],
+        type: initialData.type,
+        imageUrl: initialData.imageUrl || ""
+      }
+    : {
+        name: "",
+        dateOfBirth: "",
+        type: "",
+        imageUrl: ""
+      };
 
   const [formData, setFormData] = useState(initialFormData);
   const isEditMode = !!petId;
@@ -67,17 +74,16 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
     try {
       if (isEditMode) {
         await api.put(`/pets/${petId}`, formData);
-        alert("Pet updated successfully!");
-        onSuccess?.();
       } else {
         await api.post("/pets", formData);
         setFormData(initialFormData);
-        alert("Pet created successfully!");
       }
+      onSuccess?.();
     } catch (error) {
-      const errorMessage = error instanceof Error
-        ? error.message
-        : `Failed to ${isEditMode ? 'update' : 'create'} pet`;
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : `Failed to ${isEditMode ? "update" : "create"} pet`;
       setSubmitError(errorMessage);
     } finally {
       setSubmitting(false);
@@ -86,7 +92,9 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
 
   return (
     <form className={styles.petForm} onSubmit={handleSubmit}>
-      <h3 className={styles.title}>{isEditMode ? "Edit Pet" : "Add a New Pet"}</h3>
+      <h3 className={styles.title}>
+        {isEditMode ? "Edit Pet" : "Add a New Pet"}
+      </h3>
 
       {submitError && <div className={styles.errorMessage}>{submitError}</div>}
 
@@ -99,7 +107,9 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           value={formData.name}
           onChange={handleChange}
         />
-        {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
+        {errors.name && (
+          <span className={styles.errorMessage}>{errors.name}</span>
+        )}
       </div>
 
       <div className={styles.formField}>
@@ -111,7 +121,9 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           value={formData.dateOfBirth}
           onChange={handleChange}
         />
-        {errors.dateOfBirth && <span className={styles.errorMessage}>{errors.dateOfBirth}</span>}
+        {errors.dateOfBirth && (
+          <span className={styles.errorMessage}>{errors.dateOfBirth}</span>
+        )}
       </div>
 
       <div className={styles.formField}>
@@ -131,7 +143,9 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
             }
           }}
         />
-        {errors.type && <span className={styles.errorMessage}>{errors.type}</span>}
+        {errors.type && (
+          <span className={styles.errorMessage}>{errors.type}</span>
+        )}
       </div>
 
       <div className={styles.formField}>
@@ -160,9 +174,12 @@ const PetForm = ({ initialData, petId, onCancel, onSuccess }: PetFormProps = {})
           disabled={submitting}
         >
           {submitting
-            ? (isEditMode ? "Updating..." : "Creating...")
-            : (isEditMode ? "Update Pet" : "Create Pet")
-          }
+            ? isEditMode
+              ? "Updating..."
+              : "Creating..."
+            : isEditMode
+            ? "Update Pet"
+            : "Create Pet"}
         </button>
         {isEditMode && onCancel && (
           <button

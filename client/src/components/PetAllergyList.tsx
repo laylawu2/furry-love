@@ -197,14 +197,8 @@ const PetAllergyList = ({ pet }: PetAllergyList) => {
                     {allergy.severity}
                     {pet.isOwner && (
                       <button
-                        className={styles.actionButton}
+                        className={`${styles.small}`}
                         onClick={() => handleEdit(allergy)}
-                        style={{
-                          width: "auto",
-                          marginTop: "8px",
-                          padding: "8px 16px",
-                          display: "block"
-                        }}
                       >
                         Edit
                       </button>

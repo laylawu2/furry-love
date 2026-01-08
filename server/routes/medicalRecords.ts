@@ -136,4 +136,20 @@ router.put("/allergies/:id", async (req, res) => {
   }
 });
 
+// Get all vaccinations for autocomplete
+router.get("/vaccinations/autocomplete", async (req, res) => {
+  try {
+    const vaccinations = await prisma.vaccination.findMany({
+      select: { name: true },
+      distinct: ["name"]
+    });
+    res.json(vaccinations.map((v) => v.name));
+  } catch (error) {
+    console.error("Error fetching vaccinations for autocomplete:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch vaccinations for autocomplete" });
+  }
+});
+
 export default router;

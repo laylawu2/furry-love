@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { PetData, Vaccination } from "../lib/models";
 import styles from "./pet.module.css";
 import api from "../lib/api";
 import { validateVaccineForm } from "../lib/validators";
+import useFetch from "../hooks/useFetch";
 
 interface PetVaccineListProps {
   pet: PetData;
@@ -22,6 +23,13 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [editingVaccineId, setEditingVaccineId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState(initialFormData);
+  // const [vaccineNames, setVaccineNames] = useState<string[]>([]);
+
+  const {
+    data: vaccineNames
+    // error,
+    // loading
+  } = useFetch<PetData | null>(`/medical-records/vaccinations/autocomplete`);
 
   const validateForm = () => {
     const newErrors = validateVaccineForm(formData);
@@ -122,6 +130,17 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const filteredVaccineNames = useMemo(() => {
+    return vaccineNames && Array.isArray(vaccineNames)
+      ? vaccineNames.filter(
+          (name) =>
+            name &&
+            name.length > 0 &&
+            name.toLowerCase().includes(formData.name.toLowerCase())
+        )
+      : [];
+  }, [vaccineNames, formData.name]);
+
   return (
     <div className={styles.medicalSection}>
       {vaccineList && vaccineList.length > 0 && (
@@ -209,13 +228,8 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
                     <div>Expiring on: {vac.expiresAt.split("T")[0]}</div>
                     {pet.isOwner && (
                       <button
-                        className={styles.actionButton}
+                        className={`${styles.small}`}
                         onClick={() => handleEdit(vac)}
-                        style={{
-                          width: "auto",
-                          marginTop: "8px",
-                          padding: "8px 16px"
-                        }}
                       >
                         Edit
                       </button>
@@ -249,6 +263,21 @@ const PetVaccineList = ({ pet }: PetVaccineListProps) => {
               value={formData.name}
               placeholder="e.g., Rabies, Distemper"
             />
+            {filteredVaccineNames.length > 0 && (
+              <ul className={styles.autocompleteList}>
+                {filteredVaccineNames.map((name, index) => (
+                  <li
+                    key={index}
+                    className={styles.autocompleteItem}
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, name: name }))
+                    }
+                  >
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            )}
             {errors.name && (
               <span className={styles.errorMessage}>{errors.name}</span>
             )}

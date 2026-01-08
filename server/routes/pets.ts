@@ -20,7 +20,6 @@ router.get("/", async (req, res) => {
       isOwner: true
     }));
     res.json(petsWithOwnerInfo);
-    res.json(pets);
   } catch (error) {
     console.error("Error fetching pets:", error);
     res.status(500).json({ error: "Failed to fetch pets" });
